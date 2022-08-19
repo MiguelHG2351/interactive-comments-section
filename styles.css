@@ -17,6 +17,14 @@ body {
     background-color: var(--neutral-light-gray);
 }
 
+button {
+    user-select: none;
+    float: right;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
 figure {
     display: inline-block;
 }
@@ -134,9 +142,24 @@ figure {
 }
 
 .reply {
-    user-select: none;
-    float: right;
-    cursor: pointer;
+    color: var(--primary-moderate-blue);
+}
+
+.option-message {
+    display: flex;
+    gap: .5rem;
+}
+
+.delete, .edit {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.delete {
+    color: var(--primary-soft-red);
+}
+
+.edit {
     color: var(--primary-moderate-blue);
 }
 
@@ -165,7 +188,7 @@ figure {
         padding: .25rem .75rem;
     }
 
-    .reply-container {
+    .reply-container, .option-message {
         height: 3rem;
         line-height: 3rem;
         position: absolute;
