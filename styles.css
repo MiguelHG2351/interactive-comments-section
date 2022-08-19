@@ -72,8 +72,25 @@ figure {
     color: var(--dark-blue);
 }
 
+.its-me {
+    background-color: var(--primary-moderate-blue);
+    color: var(--neutral-white);
+    padding: 2px .5rem;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
 .time-ago, .message-txt {
     color: var(--neutral-grayish-blue);
+}
+
+.message-txt {
+    line-height: 1.5rem;
+}
+
+.mention {
+    color: var(--primary-moderate-blue);
+    font-weight: 700;
 }
 
 .message-item-option {
