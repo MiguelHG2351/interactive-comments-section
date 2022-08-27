@@ -14,6 +14,10 @@ class Message extends HTMLElement {
         <path d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z" fill="#5357B6"></path>
         </svg>`
 
+    constructor() {
+        super()
+        this.attachShadow({ mode: 'open' })
+    }
 
     messageBody(username, message, timeAgo, imageURL) {
         /* ---------------------------/----------------------------- */
@@ -50,29 +54,49 @@ class Message extends HTMLElement {
 
     MessageItemOption(message) {
         /* ---------------------------/----------------------------- */
-        const messageItemOption = document.createElement('div')
+        const $messageItemOption = document.createElement('div')
         /* ---------------------------|----------------------------- */
-        const rank = document.createElement('div')
-        const btnPlus = document.createElement('button')
-        btnPlus.innerHTML = this.iconPlus
+        const $rank = document.createElement('div')
+        const $buttonPlus = document.createElement('button')
+        $buttonPlus.innerHTML = this.iconPlus
         /* ---------------------------|----------------------------- */
-        const countRank = document.createElement('span')
-        const messageContent = document.createTextNode(message)
+        const $countRank = document.createElement('span')
+        const $messageContent = document.createTextNode(message)
         /* ---------------------------|----------------------------- */
-        const buttonMinus = document.createElement('button')
-        buttonMinus.innerHTML = this.iconMinus
+        const $buttonMinus = document.createElement('button')
+        $buttonMinus.innerHTML = this.iconMinus
         /* ---------------------------\----------------------------- */
-        const replyContainer = document.createElement('div')
-        const reply = document.createElement('span')
-        reply.innerHTML = this.iconReplay
+        const $replyContainer = document.createElement('div')
+        const $reply = document.createElement('span')
+        $reply.innerHTML = this.iconReplay
 
-        rank.appendChild(btnPlus)
-        messageItemOption.appendChild(countRank)
-        rank.appendChild(buttonMinus)
-        countRank.appendChild(messageContent)
-        replyContainer.appendChild(reply)
+        $messageItemOption.classList.add('message-item-option')
+        $rank.classList.add('rank')
+        $buttonPlus.classList.add('button-plus')
+        $countRank.classList.add('count-rank')
+        $buttonMinus.classList.add('button-minus')
+        $replyContainer.classList.add('reply-container')
+        $reply.classList.add('reply')
 
-        return messageItemOption
+        $messageItemOption.appendChild($countRank)
+        $rank.appendChild($buttonMinus)
+        $countRank.appendChild($messageContent)
+        $replyContainer.appendChild($reply)
+
+        return $messageItemOption
+    }
+
+    mainMessage() {
+        const messageItemContainer = document.createElement('div')
+        messageItemContainer.classList.add('message-item-container')
+        messageItemContainer.appendChild(this.messageBody(data.username, data.message, data.timeAgo, data.imageURL))
+        messageItemContainer.appendChild(this.MessageItemOption(data.message))
+    }
+
+    render() {
+        this.setAttribute('role', 'listitem')
+        this.classList.add('message-item')
+        this.mainMessage()
     }
     
     getTemplate() {
@@ -82,3 +106,5 @@ class Message extends HTMLElement {
 
 
 customElements.define('message-element', Message)
+
+
