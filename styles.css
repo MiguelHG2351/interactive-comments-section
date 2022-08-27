@@ -143,6 +143,7 @@ figure {
 
 .reply {
     color: var(--primary-moderate-blue);
+    cursor: pointer;
 }
 
 .option-message {
