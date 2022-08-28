@@ -14,9 +14,23 @@ class Message extends HTMLElement {
         <path d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z" fill="#5357B6"></path>
         </svg>`
 
-    constructor() {
+    constructor(username, message, timeAgo, imageURL) {
         super()
-        this.attachShadow({ mode: 'open' })
+        this.username = username
+        this.message = message
+        this.timeAgo = timeAgo
+        this.imageURL = imageURL
+        this.count = 0
+    }
+
+    messageContent(message) {
+        
+        const regex = /@([a-zA-Z0-9_]+)/g
+        const messageWithMention = message.replace(regex, (match, p1) => {
+            return `<span class="mention">${match}</span>`
+        })
+
+        return messageWithMention
     }
 
     messageBody(username, message, timeAgo, imageURL) {
@@ -29,8 +43,7 @@ class Message extends HTMLElement {
         const $username = document.createElement('span')
         const $timeAgo = document.createElement('time')
         /* ---------------------------\----------------------------- */
-        const $messageTxt = document.createElement('div')
-        const $messageContent = document.createTextNode(message)
+        const $messageTxt = document.createElement('p')
         
         $messageBody.classList.add('message-body')
         $messageHeader.classList.add('message-header')
@@ -38,7 +51,6 @@ class Message extends HTMLElement {
         $username.classList.add('username')
         $timeAgo.classList.add('time-ago')
         $messageTxt.classList.add('message-txt')
-        
 
         $img.src = imageURL
         $img.setAttribute('width', 48);$img.setAttribute('alt', username)
@@ -46,29 +58,34 @@ class Message extends HTMLElement {
 
         $username.textContent = username
         $timeAgo.textContent = timeAgo
-        $messageTxt.appendChild($messageContent)
+        $messageTxt.innerHTML = this.messageContent(message)
 
+        $messageBody.appendChild($messageHeader)
+        $messageHeader.appendChild($userFigure)
+        $messageHeader.appendChild($username)
+        $messageHeader.appendChild($timeAgo)
+        $messageBody.appendChild($messageTxt)
         
-        return container;
+        return $messageBody;
     }
 
-    MessageItemOption(message) {
+    messageItemOption(count = 0) {
         /* ---------------------------/----------------------------- */
         const $messageItemOption = document.createElement('div')
         /* ---------------------------|----------------------------- */
         const $rank = document.createElement('div')
-        const $buttonPlus = document.createElement('button')
+        const $buttonPlus = document.createElement('span')
         $buttonPlus.innerHTML = this.iconPlus
         /* ---------------------------|----------------------------- */
         const $countRank = document.createElement('span')
-        const $messageContent = document.createTextNode(message)
+        const $messageContent = document.createTextNode(count)
         /* ---------------------------|----------------------------- */
-        const $buttonMinus = document.createElement('button')
+        const $buttonMinus = document.createElement('span')
         $buttonMinus.innerHTML = this.iconMinus
         /* ---------------------------\----------------------------- */
         const $replyContainer = document.createElement('div')
         const $reply = document.createElement('span')
-        $reply.innerHTML = this.iconReplay
+        $reply.innerHTML = this.iconReplay.concat(' ', 'Reply')
 
         $messageItemOption.classList.add('message-item-option')
         $rank.classList.add('rank')
@@ -78,7 +95,10 @@ class Message extends HTMLElement {
         $replyContainer.classList.add('reply-container')
         $reply.classList.add('reply')
 
-        $messageItemOption.appendChild($countRank)
+        $messageItemOption.appendChild($rank)
+        $messageItemOption.appendChild($replyContainer)
+        $rank.appendChild($buttonPlus)
+        $rank.appendChild($countRank)
         $rank.appendChild($buttonMinus)
         $countRank.appendChild($messageContent)
         $replyContainer.appendChild($reply)
@@ -89,8 +109,9 @@ class Message extends HTMLElement {
     mainMessage() {
         const messageItemContainer = document.createElement('div')
         messageItemContainer.classList.add('message-item-container')
-        messageItemContainer.appendChild(this.messageBody(data.username, data.message, data.timeAgo, data.imageURL))
-        messageItemContainer.appendChild(this.MessageItemOption(data.message))
+        messageItemContainer.appendChild(this.messageBody(this.username, this.message, this.timeAgo, this.imageURL))
+        messageItemContainer.appendChild(this.messageItemOption(this.count))
+        this.appendChild(messageItemContainer)
     }
 
     render() {
@@ -99,12 +120,18 @@ class Message extends HTMLElement {
         this.mainMessage()
     }
     
-    getTemplate() {
-        
+    connectedCallback() {
+        this.render()
     }
 }
 
 
 customElements.define('message-element', Message)
 
+const test = document.getElementById('test')
+for (const comment of data.comments) {
+    const message  = new Message(comment.user.username, comment.content, comment.createdAt, comment.user.image.webp)
+    // message.username
 
+    test.appendChild(message)
+}

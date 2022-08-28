@@ -39,6 +39,7 @@ figure {
     background-color: var(--white);
     width: 90%;
     margin: auto;
+    display: list-item;
 }
 
 .message-item + .message-item {
@@ -197,4 +198,9 @@ figure {
         right: 1rem;
         left: unset;
     }
+}
+
+#test {
+    padding-left: 0;
+    list-style: none
 }
