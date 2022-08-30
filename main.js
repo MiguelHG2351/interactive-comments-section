@@ -14,17 +14,17 @@ class Message extends HTMLElement {
         <path d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z" fill="#5357B6"></path>
         </svg>`
 
-    constructor(username, message, timeAgo, imageURL) {
+    constructor(username, message, timeAgo, imageURL, score, replies) {
         super()
         this.username = username
         this.message = message
         this.timeAgo = timeAgo
         this.imageURL = imageURL
-        this.count = 0
+        this.score = score
+        this.replies = replies
     }
 
     messageContent(message) {
-        
         const regex = /@([a-zA-Z0-9_]+)/g
         const messageWithMention = message.replace(regex, (match, p1) => {
             return `<span class="mention">${match}</span>`
@@ -106,12 +106,36 @@ class Message extends HTMLElement {
         return $messageItemOption
     }
 
+    messageItemContainer(username, message, count, timeAgo, imageURL) {
+        const $messageItemContainer = document.createElement('div')
+        $messageItemContainer.classList.add('message-item-container')
+    
+        $messageItemContainer.appendChild(this.messageBody(username, message, timeAgo, imageURL))
+        $messageItemContainer.appendChild(this.messageItemOption(count))
+
+        return $messageItemContainer
+    }
+
     mainMessage() {
-        const messageItemContainer = document.createElement('div')
-        messageItemContainer.classList.add('message-item-container')
-        messageItemContainer.appendChild(this.messageBody(this.username, this.message, this.timeAgo, this.imageURL))
-        messageItemContainer.appendChild(this.messageItemOption(this.count))
-        this.appendChild(messageItemContainer)
+        this.appendChild(this.messageItemContainer(this.username, this.message, this.score, this.timeAgo, this.imageURL))
+
+        if(this.replies?.length > 0) {
+            debugger
+            const listContainer = document.createElement('ul')
+            listContainer.classList.add('list-message')
+
+            for(const reply of this.replies) {
+                const replyItem = document.createElement('li')
+                replyItem.setAttribute('role', 'listitem')
+                replyItem.classList.add('message-item')
+
+                console.log(reply)
+
+                replyItem.appendChild(this.messageItemContainer(reply.user.username, reply.content, reply.score, reply.createdAt, reply.user.image.webp))
+                listContainer.appendChild(replyItem)
+            }
+            this.appendChild(listContainer)
+        }
     }
 
     render() {
@@ -130,8 +154,7 @@ customElements.define('message-element', Message)
 
 const test = document.getElementById('test')
 for (const comment of data.comments) {
-    const message  = new Message(comment.user.username, comment.content, comment.createdAt, comment.user.image.webp)
-    // message.username
+    const message  = new Message(comment.user.username, comment.content, comment.createdAt, comment.user.image.webp, comment.score, comment.replies)
 
     test.appendChild(message)
 }
