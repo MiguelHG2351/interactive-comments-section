@@ -120,7 +120,6 @@ class Message extends HTMLElement {
         this.appendChild(this.messageItemContainer(this.username, this.message, this.score, this.timeAgo, this.imageURL))
 
         if(this.replies?.length > 0) {
-            debugger
             const listContainer = document.createElement('ul')
             listContainer.classList.add('list-message')
 
@@ -152,7 +151,7 @@ class Message extends HTMLElement {
 
 customElements.define('message-element', Message)
 
-const test = document.getElementById('test')
+const test = document.getElementById('list-message')
 for (const comment of data.comments) {
     const message  = new Message(comment.user.username, comment.content, comment.createdAt, comment.user.image.webp, comment.score, comment.replies)
 
