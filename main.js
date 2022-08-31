@@ -120,7 +120,10 @@ class Message extends HTMLElement {
         this.appendChild(this.messageItemContainer(this.username, this.message, this.score, this.timeAgo, this.imageURL))
 
         if(this.replies?.length > 0) {
+            const repliesListMessage = document.createElement('div')
             const listContainer = document.createElement('ul')
+
+            repliesListMessage.classList.add('replies-list-message')
             listContainer.classList.add('list-message')
 
             for(const reply of this.replies) {
@@ -133,7 +136,8 @@ class Message extends HTMLElement {
                 replyItem.appendChild(this.messageItemContainer(reply.user.username, reply.content, reply.score, reply.createdAt, reply.user.image.webp))
                 listContainer.appendChild(replyItem)
             }
-            this.appendChild(listContainer)
+            repliesListMessage.appendChild(listContainer)
+            this.appendChild(repliesListMessage)
         }
     }
 

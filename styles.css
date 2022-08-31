@@ -34,6 +34,25 @@ figure {
     padding-left: 0;
 }
 
+.replies-list-message {
+    display: flex;
+    gap: .5rem;
+    /* width: 90%;
+    margin: auto; */
+}
+
+.replies-list-message::before {
+    content: "";
+    width: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
+    box-sizing: border-box;
+    display: block;
+    background-color: var(--primary-moderate-blue);
+    margin-top: 2rem;
+    border-radius: 2px;
+}
+
 .message-item {
     box-sizing: border-box;
     background-color: var(--white);
@@ -44,16 +63,7 @@ figure {
 }
 
 .message-item.reply-message {
-    display: flex;
-    gap: .5rem;
-}
-
-.message-item.reply-message::before {
-    content: "";
-    width: 6px;
-    height: 200px;
-    display: block;
-    background-color: var(--primary-moderate-blue);
+    width: auto;
 }
 
 .message-item + .message-item {
