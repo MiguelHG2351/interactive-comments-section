@@ -40,6 +40,20 @@ figure {
     width: 90%;
     margin: auto;
     display: list-item;
+    box-sizing: border-box;
+}
+
+.message-item.reply-message {
+    display: flex;
+    gap: .5rem;
+}
+
+.message-item.reply-message::before {
+    content: "";
+    width: 6px;
+    height: 200px;
+    display: block;
+    background-color: var(--primary-moderate-blue);
 }
 
 .message-item + .message-item {

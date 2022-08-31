@@ -126,7 +126,7 @@ class Message extends HTMLElement {
             for(const reply of this.replies) {
                 const replyItem = document.createElement('li')
                 replyItem.setAttribute('role', 'listitem')
-                replyItem.classList.add('message-item')
+                replyItem.classList.add('message-item', 'reply-message')
 
                 console.log(reply)
 
